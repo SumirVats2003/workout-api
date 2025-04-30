@@ -10,7 +10,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func ConnectPostgres() {
+func OpenDBConnection() *sql.DB {
 	err := godotenv.Load(".env")
 	if err != nil {
 		panic(err)
@@ -37,4 +37,5 @@ func ConnectPostgres() {
 	}
 
 	fmt.Println("Successfully connected!")
+	return db
 }
