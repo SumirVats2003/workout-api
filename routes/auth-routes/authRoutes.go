@@ -10,13 +10,15 @@ import (
 
 func AuthRoutes(db *sql.DB) {
 	muxRouter := mux.NewRouter()
-	db.Ping()
+	db.Ping() // INFO: can be removed when more sophisticated db calls are implemented
 
-	muxRouter.HandleFunc("/auth/login", func(w http.ResponseWriter, r *http.Request) {
+	authRouter := muxRouter.PathPrefix("/auth").Subrouter()
+
+	authRouter.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "welcome to login route")
 	}).Methods("POST")
 
-	muxRouter.HandleFunc("/auth/register", func(w http.ResponseWriter, r *http.Request) {
+	authRouter.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "welcome to register route")
 	}).Methods("POST")
 
