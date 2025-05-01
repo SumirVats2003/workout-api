@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"database/sql"
 	"github.com/SumirVats2003/workout-api/dbconnector"
+	authroutes "github.com/SumirVats2003/workout-api/routes/auth-routes"
 )
 
-func connectPostgres() *sql.DB {
+func InitRoutes() {
 	db := dbconnector.OpenDBConnection()
-	return db
+	authroutes.AuthRoutes(db)
 }

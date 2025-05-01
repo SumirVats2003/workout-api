@@ -5,5 +5,5 @@ import (
 )
 
 func main() {
-	routes.AuthRoutes()
+	routes.InitRoutes()
 }
