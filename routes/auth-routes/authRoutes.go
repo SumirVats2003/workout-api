@@ -4,18 +4,21 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func AuthRoutes(db *sql.DB) {
-	http.HandleFunc("/auth/login", func(w http.ResponseWriter, r *http.Request) {
-		db.Ping()
-		fmt.Fprintf(w, "welcome to login route")
-	})
+	muxRouter := mux.NewRouter()
+	db.Ping()
 
-	http.HandleFunc("/auth/register", func(w http.ResponseWriter, r *http.Request) {
-		db.Ping()
+	muxRouter.HandleFunc("/auth/login", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "welcome to login route")
+	}).Methods("POST")
+
+	muxRouter.HandleFunc("/auth/register", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "welcome to register route")
-	})
+	}).Methods("POST")
 
 	http.ListenAndServe(":3000", nil)
 }
