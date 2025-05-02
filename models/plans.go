@@ -1,8 +1,10 @@
 package models
 
+import "time"
+
 type Plan struct {
 	planId string
 	userId string
-	timestamp int
+	createdAt time.Time
 	status PlanStatus
 }
