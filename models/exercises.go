@@ -1,8 +1,8 @@
 package models
 
 type Exercise struct {
-	exerciseId string
-	name string
-	category Category
-	muscleGroup MuscleGroup
+	ExerciseId  string
+	Name        string
+	Category    Category
+	MuscleGroup MuscleGroup
 }

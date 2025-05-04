@@ -1,10 +1,10 @@
 package models
 
 type Workout struct {
-	workoutId string
-	planId string
-	exerciseId string
-	reps int
-	sets int
-	weight float64
+	WorkoutId  string
+	PlanId     string
+	ExerciseId string
+	Reps       int
+	Sets       int
+	Weight     float64
 }

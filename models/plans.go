@@ -3,8 +3,8 @@ package models
 import "time"
 
 type Plan struct {
-	planId string
-	userId string
-	createdAt time.Time
-	status PlanStatus
+	PlanId    string
+	UserId    string
+	CreatedAt time.Time
+	Status    PlanStatus
 }
