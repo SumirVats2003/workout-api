@@ -7,18 +7,16 @@ import (
 	"time"
 
 	"github.com/SumirVats2003/workout-api/models"
+	"github.com/SumirVats2003/workout-api/utils"
 )
 
-func Login(db *sql.DB, user models.User, password string) {
-	fmt.Println(user)
+func Login(db *sql.DB, email string, password string) {
+	fmt.Println(email)
 	fmt.Println(password)
 }
 
 func Register(db *sql.DB, user models.User, password string) {
-	db.Ping()
-	fmt.Println(user)
-	fmt.Println(password)
-	user.UserId = "" // TODO: implement uuid utility
+	user.UserId = utils.GenerateUUID()
 
 	res, err := db.Exec(
 		"INSERT INTO users (id, created_at, name, email, password) VALUES ($1, $2, $3, $4, $5)",

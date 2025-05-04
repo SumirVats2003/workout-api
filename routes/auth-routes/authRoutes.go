@@ -44,7 +44,7 @@ func AuthRoutes(muxRouter *mux.Router, db *sql.DB) {
 			return
 		}
 
-		authapi.Login(db, user, password)
+		authapi.Login(db, user.Email, password)
 	}).Methods("POST")
 
 	authRouter.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
