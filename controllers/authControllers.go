@@ -52,26 +52,26 @@ func (c *Controller) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) Register(w http.ResponseWriter, r *http.Request) {
-		var payload credentials
-		user, password, err := parseJSON(&payload, w, r)
+	var payload credentials
+	user, password, err := parseJSON(&payload, w, r)
 
-		if err != nil {
-			http.Error(w, "Invalid request payload", http.StatusBadRequest)
-			return
-		}
-
-		result := authapi.Register(c.DB, user, password)
-		if result == nil {
-			w.WriteHeader(http.StatusBadRequest)
-			json.NewEncoder(w).Encode(map[string]string{
-				"error": "User registration failed",
-			})
-			return
-		}
-
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]string{
-			"message": "User registered successfully",
-		})
+	if err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
 	}
+
+	result := authapi.Register(c.DB, user, password)
+	if result == nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "User registration failed",
+		})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "User registered successfully",
+	})
+}
