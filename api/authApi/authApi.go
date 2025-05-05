@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/SumirVats2003/workout-api/models"
-	"github.com/SumirVats2003/workout-api/utils"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -67,7 +66,6 @@ func Login(db *sql.DB, email string, password string) (string, error) {
 }
 
 func Register(db *sql.DB, user models.User, password string) sql.Result {
-	user.UserId = utils.GenerateUUID()
 	passwordHash, err := hashPassword(password)
 
 	if err != nil {
