@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"time"
 
@@ -61,7 +60,6 @@ func Login(db *sql.DB, email string, password string) (string, error) {
 
 	tokenString, err := createJsonWebToken(email)
 	if err != nil {
-		log.Fatal("could not create JWT")
 		return "", err
 	}
 
@@ -73,7 +71,6 @@ func Register(db *sql.DB, user models.User, password string) {
 	passwordHash := hashPassword(password)
 
 	if passwordHash == "" {
-		log.Fatal("could not hash password")
 		return
 	}
 
@@ -87,7 +84,7 @@ func Register(db *sql.DB, user models.User, password string) {
 	)
 
 	if err != nil {
-		log.Println("Insert error:", err)
+		fmt.Println("Insert error:", err)
 	}
 
 	fmt.Print(res)

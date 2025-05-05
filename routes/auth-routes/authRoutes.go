@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	authapi "github.com/SumirVats2003/workout-api/api/authApi"
@@ -41,17 +40,19 @@ func AuthRoutes(muxRouter *mux.Router, db *sql.DB) {
 		user, password, err := parseJSON(&payload, w, r)
 
 		if err != nil {
-			log.Fatal(err.Error())
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
 		tokenString, err := authapi.Login(db, user.Email, password)
 		if err != nil {
-			log.Fatal("could not generate token")
+			http.Error(w, err.Error(), http.StatusUnauthorized)
 			fmt.Fprintf(w, err.Error(), http.StatusBadRequest)
 		}
 
-		fmt.Fprintf(w, tokenString, http.StatusAccepted)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintf(w, `{"token":"%s"}`, tokenString)
 	}).Methods("POST")
 
 	authRouter.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +60,6 @@ func AuthRoutes(muxRouter *mux.Router, db *sql.DB) {
 		user, password, err := parseJSON(&payload, w, r)
 
 		if err != nil {
-			log.Fatal(err.Error())
 			return
 		}
 
