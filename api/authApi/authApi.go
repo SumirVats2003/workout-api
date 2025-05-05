@@ -2,14 +2,19 @@ package authapi
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/SumirVats2003/workout-api/models"
 	"github.com/SumirVats2003/workout-api/utils"
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
+
+var secretKey = []byte(os.Getenv("JWT_KEY"))
 
 func hashPassword(password string) string {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
@@ -19,9 +24,48 @@ func hashPassword(password string) string {
 	return string(bytes)
 }
 
-func Login(db *sql.DB, email string, password string) {
-	fmt.Println(email)
-	fmt.Println(password)
+func createJsonWebToken(email string) (string, error) {
+	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": email,
+		"iss": "workout-api",
+		"exp": time.Now().Add(time.Hour).Unix(),
+		"iat": time.Now().Unix(),
+	})
+
+	tokenString, err := claims.SignedString(secretKey)
+	if err != nil {
+		return "", err
+	}
+	return tokenString, nil
+}
+
+func Login(db *sql.DB, email string, password string) (string, error) {
+	var hashedPassword string
+
+	err := db.QueryRow(
+		"SELECT password FROM users WHERE email = $1",
+		email,
+	).Scan(&hashedPassword)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", errors.New("user not found")
+		}
+		return "", err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+	if err != nil {
+		return "", errors.New("invalid password")
+	}
+
+	tokenString, err := createJsonWebToken(email)
+	if err != nil {
+		log.Fatal("could not create JWT")
+		return "", err
+	}
+
+	return tokenString, nil
 }
 
 func Register(db *sql.DB, user models.User, password string) {

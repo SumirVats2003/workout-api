@@ -3,6 +3,7 @@ package authroutes
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -44,7 +45,13 @@ func AuthRoutes(muxRouter *mux.Router, db *sql.DB) {
 			return
 		}
 
-		authapi.Login(db, user.Email, password)
+		tokenString, err := authapi.Login(db, user.Email, password)
+		if err != nil {
+			log.Fatal("could not generate token")
+			fmt.Fprintf(w, err.Error(), http.StatusBadRequest)
+		}
+
+		fmt.Fprintf(w, tokenString, http.StatusAccepted)
 	}).Methods("POST")
 
 	authRouter.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
