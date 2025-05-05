@@ -15,12 +15,12 @@ import (
 
 var secretKey = []byte(os.Getenv("JWT_KEY"))
 
-func hashPassword(password string) string {
+func hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
-		return ""
+		return "", err
 	}
-	return string(bytes)
+	return string(bytes), nil
 }
 
 func createJsonWebToken(email string) (string, error) {
@@ -66,12 +66,12 @@ func Login(db *sql.DB, email string, password string) (string, error) {
 	return tokenString, nil
 }
 
-func Register(db *sql.DB, user models.User, password string) {
+func Register(db *sql.DB, user models.User, password string) sql.Result {
 	user.UserId = utils.GenerateUUID()
-	passwordHash := hashPassword(password)
+	passwordHash, err := hashPassword(password)
 
-	if passwordHash == "" {
-		return
+	if err != nil {
+		return nil
 	}
 
 	res, err := db.Exec(
@@ -82,10 +82,10 @@ func Register(db *sql.DB, user models.User, password string) {
 		user.Email,
 		passwordHash,
 	)
-
 	if err != nil {
 		fmt.Println("Insert error:", err)
+		return nil
 	}
 
-	fmt.Print(res)
+	return res
 }

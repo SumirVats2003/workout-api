@@ -47,12 +47,14 @@ func AuthRoutes(muxRouter *mux.Router, db *sql.DB) {
 		tokenString, err := authapi.Login(db, user.Email, password)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusUnauthorized)
-			fmt.Fprintf(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintf(w, `{"token":"%s"}`, tokenString)
+		json.NewEncoder(w).Encode(map[string]string{
+			"token": tokenString,
+		})
 	}).Methods("POST")
 
 	authRouter.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
@@ -60,9 +62,23 @@ func AuthRoutes(muxRouter *mux.Router, db *sql.DB) {
 		user, password, err := parseJSON(&payload, w, r)
 
 		if err != nil {
+			http.Error(w, "Invalid request payload", http.StatusBadRequest)
 			return
 		}
 
-		authapi.Register(db, user, password)
+		result := authapi.Register(db, user, password)
+		if result == nil {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(map[string]string{
+				"error": "User registration failed",
+			})
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "User registered successfully",
+		})
 	}).Methods("POST")
 }
