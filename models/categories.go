@@ -18,8 +18,8 @@ func (c Category) Index() int {
 
 func ParseCategory(s string) Category {
 	var categoryMap = map[string]Category{
-		"Cardio": Cardio,
-		"Strength": Strength,
+		"Cardio":      Cardio,
+		"Strength":    Strength,
 		"Flexibility": Flexibility,
 	}
 	if c, ok := categoryMap[s]; ok {

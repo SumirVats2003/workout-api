@@ -1,4 +1,4 @@
-package authroutes
+package routes
 
 import (
 	"database/sql"

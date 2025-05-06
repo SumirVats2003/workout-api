@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	exerciseapi "github.com/SumirVats2003/workout-api/api/exerciseApi"
+	"github.com/SumirVats2003/workout-api/api"
 	"github.com/SumirVats2003/workout-api/models"
 	"github.com/SumirVats2003/workout-api/utils"
 	"github.com/gorilla/mux"
@@ -36,7 +36,7 @@ func (c *Controller) GetExercise(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	name := vars["name"]
 
-	exercise, err := exerciseapi.GetExercise(c.DB, name)
+	exercise, err := api.GetExercise(c.DB, name)
 
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -49,8 +49,8 @@ func (c *Controller) GetExercise(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{
-		"name": exercise.Name,
-		"category": exercise.Category.String(),
+		"name":        exercise.Name,
+		"category":    exercise.Category.String(),
 		"muscleGroup": exercise.MuscleGroup.String(),
 	})
 }
@@ -64,7 +64,7 @@ func (c *Controller) CreateExercise(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result := exerciseapi.CreateExercise(c.DB, exercise)
+	result := api.CreateExercise(c.DB, exercise)
 
 	if result == nil {
 		w.WriteHeader(http.StatusBadRequest)

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	authapi "github.com/SumirVats2003/workout-api/api/authApi"
+	"github.com/SumirVats2003/workout-api/api"
 	"github.com/SumirVats2003/workout-api/models"
 	"github.com/SumirVats2003/workout-api/utils"
 )
@@ -39,7 +39,7 @@ func (c *Controller) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tokenString, err := authapi.Login(c.DB, credentials.Email, credentials.Password)
+	tokenString, err := api.Login(c.DB, credentials.Email, credentials.Password)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
@@ -67,7 +67,7 @@ func (c *Controller) Register(w http.ResponseWriter, r *http.Request) {
 		Email:  credentials.Email,
 	}
 
-	result := authapi.Register(c.DB, user, credentials.Password)
+	result := api.Register(c.DB, user, credentials.Password)
 	if result == nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{

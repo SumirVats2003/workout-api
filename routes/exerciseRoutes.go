@@ -1,4 +1,4 @@
-package exerciseroutes
+package routes
 
 import (
 	"database/sql"

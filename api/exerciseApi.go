@@ -1,4 +1,4 @@
-package exerciseapi
+package api
 
 import (
 	"database/sql"
