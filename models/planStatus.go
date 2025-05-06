@@ -3,7 +3,7 @@ package models
 type PlanStatus int
 
 const (
-	Completed PlanStatus = iota
+	Completed PlanStatus = iota + 1
 	Ongoing
 )
 
@@ -21,7 +21,7 @@ func ParseStatus(s string) PlanStatus {
 		"Ongoing":   Ongoing,
 	}
 	if ps, ok := planStatusMap[s]; ok {
-		return ps+1
+		return ps
 	}
 	return -1
 }

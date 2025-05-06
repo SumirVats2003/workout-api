@@ -3,7 +3,7 @@ package models
 type Category int
 
 const (
-	Cardio Category = iota
+	Cardio Category = iota + 1
 	Strength
 	Flexibility
 )
@@ -23,7 +23,7 @@ func ParseCategory(s string) Category {
 		"Flexibility": Flexibility,
 	}
 	if c, ok := categoryMap[s]; ok {
-		return c+1
+		return c
 	}
 	return -1
 }

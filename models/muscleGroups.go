@@ -3,16 +3,17 @@ package models
 type MuscleGroup int
 
 const (
-	Chest MuscleGroup = iota
+	Chest MuscleGroup = iota + 1
 	Biceps
 	Triceps
 	Shoulders
+	Abs
 	Back
 	Legs
 )
 
 func (m MuscleGroup) String() string {
-	return [...]string{"Chest", "Biceps", "Triceps", "Shoulders", "Back", "Legs"}[m-1]
+	return [...]string{"Chest", "Biceps", "Triceps", "Shoulders", "Abs", "Back", "Legs"}[m-1]
 }
 
 func (m MuscleGroup) Index() int {
@@ -25,11 +26,12 @@ func ParseMuscleGroup(s string) MuscleGroup {
 		"Biceps":    Biceps,
 		"Triceps":   Triceps,
 		"Shoulders": Shoulders,
+		"Abs":       Abs,
 		"Back":      Back,
 		"Legs":      Legs,
 	}
 	if mg, ok := muscleGroupMap[s]; ok {
-		return mg+1
+		return mg
 	}
 	return -1
 }
