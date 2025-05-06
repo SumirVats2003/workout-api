@@ -15,6 +15,7 @@ func InitRoutes() {
 	controller := &controllers.Controller{DB: db}
 	authRoutes(router, controller)
 	exerciseRoutes(router, controller)
+	planRoutes(router, controller)
 
 	http.ListenAndServe(":3000", router)
 }
