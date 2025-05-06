@@ -7,8 +7,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func AuthRoutes(muxRouter *mux.Router, db *sql.DB) {
-	controller := &controllers.Controller{DB: db}
+func AuthRoutes(muxRouter *mux.Router, db *sql.DB, controller *controllers.Controller) {
 	authRouter := muxRouter.PathPrefix("/auth").Subrouter()
 
 	authRouter.HandleFunc("/login", controller.Login).Methods("POST")
