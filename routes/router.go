@@ -13,8 +13,8 @@ func InitRoutes() {
 	db := dbconnector.OpenDBConnection()
 
 	controller := &controllers.Controller{DB: db}
-	AuthRoutes(router, db, controller)
-	ExerciseRoutes(router, db, controller)
+	authRoutes(router, controller)
+	exerciseRoutes(router, controller)
 
 	http.ListenAndServe(":3000", router)
 }
