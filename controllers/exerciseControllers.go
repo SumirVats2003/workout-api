@@ -2,11 +2,13 @@ package controllers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	exerciseapi "github.com/SumirVats2003/workout-api/api/exerciseApi"
 	"github.com/SumirVats2003/workout-api/models"
 	"github.com/SumirVats2003/workout-api/utils"
+	"github.com/gorilla/mux"
 )
 
 type exerciseData struct {
@@ -31,8 +33,30 @@ func parseJSONforExercise(payload *exerciseData, w http.ResponseWriter, r *http.
 	return exercise, nil
 }
 
+func (c *Controller) GetExercise(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	name := vars["name"]
+
+	exercise, err := exerciseapi.GetExercise(c.DB, name)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"error": "Cannot fetch exercise",
+		})
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"name": exercise.Name,
+		"category": exercise.Category.String(),
+		"muscleGroup": exercise.MuscleGroup.String(),
+	})
+}
+
 func (c *Controller) CreateExercise(w http.ResponseWriter, r *http.Request) {
-	// TODO: Resolve route hit bug
 	var payload exerciseData
 	exercise, err := parseJSONforExercise(&payload, w, r)
 

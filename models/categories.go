@@ -15,3 +15,15 @@ func (c Category) String() string {
 func (c Category) Index() int {
 	return int(c)
 }
+
+func ParseCategory(s string) Category {
+	var categoryMap = map[string]Category{
+		"Cardio": Cardio,
+		"Strength": Strength,
+		"Flexibility": Flexibility,
+	}
+	if c, ok := categoryMap[s]; ok {
+		return c+1
+	}
+	return -1
+}
