@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	exerciseapi "github.com/SumirVats2003/workout-api/api/exerciseApi"
