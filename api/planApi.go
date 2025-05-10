@@ -31,6 +31,7 @@ func GetPlan(db *sql.DB, userId, planId string) models.PlanResponse {
 		return models.PlanResponse{}
 	}
 
+	// TODO: need to implement scan to the required format
 	res.Scan()
 
 	return planResponse
